@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        /* canvas{
+            width: 100%;
+            height: 100%;
+        } */
+        body{
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+        }
+    </style>
+    <script>
+        function addEvent(dom, type, fn) {
+            if (dom.addEventListener) {
+                dom.addEventListener(type, fn);
+            } else if (dom.attachEvent) {
+                dom.attachEvent("on" + type, fn);
+            } else {
+                dom["on" + type] = fn;
+            }
+        }
+    </script>
+    <script src="../common/three/three.js"></script>
+</head>
+<body>
+    
+</body>
+<script>
+    var body = document.body;
+    console.log(body.clientWidth, body.clientHeight);
+
+    var scene = new THREE.Scene();
+
+    var camera = new THREE.PerspectiveCamera(
+        75, // 可视夹角
+        body.clientWidth / body.clientHeight, // 纵横比
+        0.1, // 近平面
+        1000 // 远平面
+    );
+
+    var renderer = new THREE.WebGLRenderer();
+    
+    renderer.setSize(body.clientWidth, body.clientHeight);
+    // renderer.setClearColor('#ffffff');
+    body.appendChild(renderer.domElement);
+
+    // resize浏览器窗口自动缩放
+    /* addEvent(window,'resize',function(){
+        renderer.setSize(body.clientWidth, body.clientHeight);
+    }); */
+
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
+    var material = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
+
+    var box = new THREE.Mesh(geometry, material);
+
+    scene.add(box);
+
+    camera.position.z = 5; // 物体初始深度位置+深
+    camera.position.x = 1; // 物体初始水平位置+左
+    camera.position.y = 1; // 物体初始垂直位置+下
+
+    function render() {
+        renderer.render(scene, camera);
+        box.rotation.x += 0.01;
+        
+        // 只要浏览器闲置，就会不断被调用
+        // requestAnimationFrame(render);
+    }
+
+    render();
+</script>
+</html>
