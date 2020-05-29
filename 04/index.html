@@ -62,6 +62,7 @@
 
     function initScene() {
         scene = new THREE.Scene();
+        console.log(scene.position);
     }
 
     function initCamera() {
@@ -71,10 +72,11 @@
             0.1, // 近平面
             1000 // 远平面
         );
-        camera.position.z = 5; // 物体初始深度位置+深
-        camera.position.x = 1; // 物体初始水平位置+左
-        camera.position.y = 1; // 物体初始垂直位置+下
-        camera.up.x = 10;
+        console.log(camera.position);
+        camera.position.x = 0; // 相机右移
+        camera.position.y = 0; // 相机上移
+        camera.position.z = 5; // 相机拉远
+        camera.up.x = 0;
         camera.up.y = 0;
         camera.up.z = 0;
         /* camera.lookAt({
