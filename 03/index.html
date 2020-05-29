@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
+
         /* canvas{
             width: 100%;
             height: 100%;
         } */
-        body{
+        body {
             position: absolute;
             top: 0px;
             left: 0px;
@@ -34,8 +36,9 @@
     </script>
     <script src="../common/three/three.js"></script>
 </head>
+
 <body>
-    
+
 </body>
 <script>
     var body = document.body;
@@ -43,25 +46,25 @@
 
     var scene, camera, renderer, light;
 
-    function initRenderer(){
+    function initRenderer() {
         renderer = new THREE.WebGLRenderer({
             antialias: true
         });
         renderer.setSize(body.clientWidth, body.clientHeight);
         // renderer.setClearColor('#ffffff');
         body.appendChild(renderer.domElement);
-        
+
         // resize浏览器窗口自动缩放
         /* addEvent(window,'resize',function(){
             renderer.setSize(body.clientWidth, body.clientHeight);
         }); */
     }
 
-    function initScene(){
+    function initScene() {
         scene = new THREE.Scene();
     }
 
-    function initCamera(){
+    function initCamera() {
         camera = new THREE.PerspectiveCamera(
             75, // 可视夹角
             body.clientWidth / body.clientHeight, // 纵横比
@@ -81,11 +84,11 @@
         }); */
     }
 
-     function initLight() {
+    function initLight() {
         light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
         light.position.set(100, 100, 200);
         scene.add(light);
-    } 
+    }
     var box, line;
     function initObject() {
         var geometry = new THREE.BoxGeometry(1, 1, 1);
@@ -103,7 +106,7 @@
         LineGeometry.vertices.push(p1);
         LineGeometry.vertices.push(p2);
         LineGeometry.colors.push(color1, color2);
-        var line = new THREE.Line(LineGeometry, LineMaterial, THREE.LineSegments ); 
+        var line = new THREE.Line(LineGeometry, LineMaterial, THREE.LineSegments);
         scene.add(line);
     }
 
@@ -116,7 +119,7 @@
         requestAnimationFrame(render);
     }
 
-    function init(){
+    function init() {
         initRenderer();
         initCamera();
         initScene();
@@ -124,10 +127,11 @@
 
         initObject();
 
-        render(box);
+        render();
     }
 
     init();
 
 </script>
+
 </html>
