@@ -88,8 +88,8 @@
     }
 
     function initLight() {
-        light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
-        light.position.set(100, 100, 200);
+        light = new THREE.DirectionalLight(0xFF0000, 1.0, 0); // 颜色，强度，..
+        light.position.set(100, 100, 200);// 光线位置
         scene.add(light);
     }
     var box, line;
@@ -104,6 +104,7 @@
         scene.add(box);
 
         var LineGeometry = new THREE.Geometry();
+        // 线的基本材质
         var LineMaterial = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
         var color1 = new THREE.Color(0x444444),
             color2 = new THREE.Color(0xFF0000);
