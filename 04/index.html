@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
+        * {
             margin: 0;
             padding: 0;
         }
+
         /* canvas{
             width: 100%;
             height: 100%;
         } */
-        body{
+        body {
             position: absolute;
             top: 0px;
             left: 0px;
@@ -34,139 +36,102 @@
     </script>
     <script src="../common/three/three.js"></script>
 </head>
+
 <body>
-    
+
 </body>
 <script>
     var body = document.body;
     console.log(body.clientWidth, body.clientHeight);
 
-     var renderer,width,height;
-
-        function initThree() {
-
-            width = body.clientWidth;
-
-            height = body.clientHeight;
-
-            renderer = new THREE.WebGLRenderer({
-
-                antialias: true
-
-            });
-
-            renderer.setSize(width, height);
-
-            body.appendChild(renderer.domElement);
-
-            renderer.setClearColor(0xFFFFFF, 1.0);
-
-        }
-
-
-
-        var camera;
-
-        function initCamera() {
-            camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000);
-
-            camera.position.x = 0;
-
-            camera.position.y = 1000;
-
-            camera.position.z = 0;
-
-            camera.up.x = 0;
-
-            camera.up.y = 0;
-
-            camera.up.z = 1;
-
-            camera.lookAt({
-
-                x: 0,
-
-                y: 0,
-
-                z: 0
-
-            });
-
-        }
-
-
-
-        var scene;
-
-        function initScene() {
-
-            scene = new THREE.Scene();
-
-        }
-
-
-
-        var light;
-
-        function initLight() {
-
-            light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
-
-            light.position.set(100, 100, 200);
-
-            scene.add(light);
-
-        }
-
-
-
-        var cube;
-
-        function initObject() {
-
-
-
-            var geometry = new THREE.Geometry();
-
-            var material = new THREE.LineBasicMaterial({ vertexColors: true });
-
-            var color1 = new THREE.Color(0x444444), color2 = new THREE.Color(0xFF0000);
-
-
-
-            // 线的材质可以由2点的颜色决定
-
-            var p1 = new THREE.Vector3(-100, 0, 100);
-
-            var p2 = new THREE.Vector3(100, 0, -100);
-
-            geometry.vertices.push(p1);
-
-            geometry.vertices.push(p2);
-
-            geometry.colors.push(color1, color2);
-
-
-
-            var line = new THREE.Line(geometry, material, THREE.LineSegments );
-
-            scene.add(line);
-
-        } 
-
-
-    function init(){
-        // initRenderer();
+    var scene, camera, renderer, light;
+
+    function initRenderer() {
+        renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+        renderer.setSize(body.clientWidth, body.clientHeight);
+        // renderer.setClearColor('#ffffff');
+        body.appendChild(renderer.domElement);
+
+        // resize浏览器窗口自动缩放
+        /* addEvent(window,'resize',function(){
+            renderer.setSize(body.clientWidth, body.clientHeight);
+        }); */
+    }
+
+    function initScene() {
+        scene = new THREE.Scene();
+    }
+
+    function initCamera() {
+        camera = new THREE.PerspectiveCamera(
+            75, // 可视夹角
+            body.clientWidth / body.clientHeight, // 纵横比
+            0.1, // 近平面
+            1000 // 远平面
+        );
+        camera.position.z = 5; // 物体初始深度位置+深
+        camera.position.x = 1; // 物体初始水平位置+左
+        camera.position.y = 1; // 物体初始垂直位置+下
+        camera.up.x = 10;
+        camera.up.y = 0;
+        camera.up.z = 0;
+        /* camera.lookAt({
+            x: 0,
+            y: 0,
+            z: 0
+        }); */
+    }
+
+    function initLight() {
+        light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
+        light.position.set(100, 100, 200);
+        scene.add(light);
+    }
+    var box, line;
+    function initObject() {
+        var geometry = new THREE.BoxGeometry(1, 1, 1);
+        var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
+
+        box = new THREE.Mesh(geometry, BoxMaterial);
+        scene.add(box);
+
+        var LineGeometry = new THREE.Geometry();
+        var LineMaterial = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
+        var color1 = new THREE.Color(0x444444),
+            color2 = new THREE.Color(0xFF0000);
+        var p1 = new THREE.Vector3(-100, 0, 100);
+        var p2 = new THREE.Vector3(100, 0, -100);
+        LineGeometry.vertices.push(p1);
+        LineGeometry.vertices.push(p2);
+        LineGeometry.colors.push(color1, color2);
+        var line = new THREE.Line(LineGeometry, LineMaterial, THREE.LineSegments);
+        scene.add(line);
+    }
+
+    function render() {
+        renderer.render(scene, camera);
+        // console.log(box.rotation.x);
+        box.rotation.x += 0.01;
+
+        // 只要浏览器闲置，就会不断被调用
+        requestAnimationFrame(render);
+    }
+
+    function init() {
+        initRenderer();
         initCamera();
         initScene();
         initLight();
 
         initObject();
 
-        // render();
+        render();
     }
 
     init();
 
 </script>
+
 </html>
