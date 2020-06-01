@@ -106,13 +106,17 @@
         var LineGeometry = new THREE.Geometry();
         // 线的基本材质
         var LineMaterial = new THREE.LineBasicMaterial({ vertexColors: true });
-        var color1 = new THREE.Color(0xffdd00),
-            color2 = new THREE.Color(0xFF0000);
+        var color1 = new THREE.Color(0xff4400),
+            color2 = new THREE.Color(0x00ff00),
+            color3 = new THREE.Color(0x0000dd);
         var p1 = new THREE.Vector3(-1, 0, 0);
         var p2 = new THREE.Vector3(1, 0, 0);
+        var p3 = new THREE.Vector3(0, -1, 0);
         LineGeometry.vertices.push(p1);
         LineGeometry.vertices.push(p2);
-        LineGeometry.colors.push(color1, color2);
+        LineGeometry.vertices.push(p3);
+        LineGeometry.vertices.push(p1);
+        LineGeometry.colors.push(color1, color2, color3, color1);
         var line = new THREE.Line(LineGeometry, LineMaterial, THREE.LineSegments);
         scene.add(line);
     }
