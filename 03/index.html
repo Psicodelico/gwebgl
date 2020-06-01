@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>线与立方体</title>
     <style>
         * {
             margin: 0;
@@ -48,6 +48,7 @@
 
     function initRenderer() {
         renderer = new THREE.WebGLRenderer({
+            // 抗锯齿，会消耗性能
             antialias: true
         });
         renderer.setSize(body.clientWidth, body.clientHeight);
@@ -62,6 +63,7 @@
 
     function initScene() {
         scene = new THREE.Scene();
+        console.log(scene.position);
     }
 
     function initCamera() {
@@ -71,13 +73,14 @@
             0.1, // 近平面
             1000 // 远平面
         );
-        camera.position.z = 5; // 物体初始深度位置+深
-        camera.position.x = 1; // 物体初始水平位置+左
-        camera.position.y = 1; // 物体初始垂直位置+下
-        camera.up.x = 10;
+        console.log(camera.position);
+        camera.position.x = 0; // 相机右移
+        camera.position.y = 0; // 相机上移
+        camera.position.z = 5; // 相机前移
+        /* camera.up.x = 0;
         camera.up.y = 0;
         camera.up.z = 0;
-        /* camera.lookAt({
+        camera.lookAt({
             x: 0,
             y: 0,
             z: 0
@@ -85,8 +88,8 @@
     }
 
     function initLight() {
-        light = new THREE.DirectionalLight(0xFF0000, 1.0, 0);
-        light.position.set(100, 100, 200);
+        light = new THREE.DirectionalLight(0xFF0000, 1.0, 0); // 颜色，强度，..
+        light.position.set(100, 100, 200);// 光线位置
         scene.add(light);
     }
     var box, line;
@@ -95,14 +98,18 @@
         var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
 
         box = new THREE.Mesh(geometry, BoxMaterial);
+        box.position.x = 1; // 物体右移
+        box.position.y = 1; // 物体上移
+        box.position.z = 1; // 物体前移
         scene.add(box);
 
         var LineGeometry = new THREE.Geometry();
+        // 线的基本材质
         var LineMaterial = new THREE.LineBasicMaterial({ vertexColors: THREE.VertexColors });
-        var color1 = new THREE.Color(0x444444),
+        var color1 = new THREE.Color(0xffdd00),
             color2 = new THREE.Color(0xFF0000);
-        var p1 = new THREE.Vector3(-100, 0, 100);
-        var p2 = new THREE.Vector3(100, 0, -100);
+        var p1 = new THREE.Vector3(-1, 0, 0);
+        var p2 = new THREE.Vector3(1, 0, 0);
         LineGeometry.vertices.push(p1);
         LineGeometry.vertices.push(p2);
         LineGeometry.colors.push(color1, color2);
@@ -111,6 +118,7 @@
     }
 
     function render() {
+        renderer.clear();
         renderer.render(scene, camera);
         // console.log(box.rotation.x);
         box.rotation.x += 0.01;
@@ -123,7 +131,7 @@
         initRenderer();
         initCamera();
         initScene();
-        initLight();
+        // initLight();
 
         initObject();
 
