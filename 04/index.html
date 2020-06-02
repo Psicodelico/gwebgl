@@ -106,11 +106,13 @@
         geometry.vertices.push(new THREE.Vector3(500, 0, 0));
 
         for (var i = 0; i <= 20; i++) {
-            var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.2 }));
+            // 画横线
+            var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xcccccc, opacity: 0.2 }));
             line.position.z = (i * 50) - 500;
             scene.add(line);
 
-            var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.2 }));
+            // 画纵线
+            var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xcccccc, opacity: 0.2 }));
             line.position.x = (i * 50) - 500;
             line.rotation.y = 90 * Math.PI / 180;
             scene.add(line);
@@ -131,7 +133,7 @@
         initRenderer();
         initCamera();
         initScene();
-        // initLight();
+        initLight();
 
         initObject();
 
