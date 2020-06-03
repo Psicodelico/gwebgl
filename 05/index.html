@@ -112,6 +112,7 @@
         renderer.render(scene, camera);
         // console.log(box.rotation.x);
         // 2Π = 360° 
+        box.rotation.y -= 0.01;
         object.rotation.x += 0.01;
         // axesHelper.rotation.x += 0.01;
         // 除了x y z还可以围绕特定的向量去旋转
