@@ -55,8 +55,9 @@
     }
 
     function initTween() {
-        createjs.Tween.get(camera.position)
-            .to({ x: 200 }, 3000);
+        createjs.Tween.get(camera.position, {
+            loop: true
+        }).to({ x: 200 }, 3000);
     }
 
     function initRenderer() {
