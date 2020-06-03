@@ -36,6 +36,7 @@
     </script>
     <script src="../common/three/three.min.js"></script>
     <script src="../common/stats/stats.min.js"></script>
+    <script src="../common/tween/tweenjs.min.js"></script>
 </head>
 
 <body>
@@ -51,6 +52,11 @@
         stats = new Stats();
         body.appendChild(stats.domElement);
         stats.domElement.classList.add("dom-stats");
+    }
+
+    function initTween() {
+        createjs.Tween.get(camera.position)
+            .to({ x: 200 }, 3000);
     }
 
     function initRenderer() {
@@ -131,7 +137,6 @@
     }
 
     function init() {
-        initStats();
         initRenderer();
         initCamera();
         initScene();
@@ -139,6 +144,8 @@
 
         initObject();
 
+        initStats();
+        initTween();
         render();
     }
 
