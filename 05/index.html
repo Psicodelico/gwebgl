@@ -90,10 +90,11 @@
         light.position.set(100, 100, 200);// 光线位置
         scene.add(light);
     }
-    var axesHelper, lines;
+    var object, axesHelper, lines;
     function initObject() {
+        object = new THREE.Object3D();
         axesHelper = new THREE.AxesHelper(200);
-        scene.add(axesHelper);
+        object.add(axesHelper);
 
         var geometry = new THREE.BoxGeometry(100, 100, 100);
         var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
@@ -102,7 +103,8 @@
         box.position.x = 1; // 物体右移
         box.position.y = 1; // 物体上移
         box.position.z = 1; // 物体前移
-        scene.add(box);
+        object.add(box);
+        scene.add(object);
     }
 
     function render() {
@@ -110,8 +112,8 @@
         renderer.render(scene, camera);
         // console.log(box.rotation.x);
         // 2Π = 360° 
-        box.rotation.x += 0.01;
-        axesHelper.rotation.x += 0.01;
+        object.rotation.x += 0.01;
+        // axesHelper.rotation.x += 0.01;
         // 除了x y z还可以围绕特定的向量去旋转
 
         // 只要浏览器闲置，就会不断被调用
