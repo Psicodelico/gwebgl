@@ -92,15 +92,6 @@
     }
     var box, lines;
     function initObject() {
-        var geometry = new THREE.BoxGeometry(100, 100, 100);
-        var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
-
-        box = new THREE.Mesh(geometry, BoxMaterial);
-        box.position.x = 1; // 物体右移
-        box.position.y = 1; // 物体上移
-        box.position.z = 1; // 物体前移
-        scene.add(box);
-
         var geometry = new THREE.Geometry();
         geometry.vertices.push(new THREE.Vector3(- 500, 0, 0));
         geometry.vertices.push(new THREE.Vector3(500, 0, 0));
@@ -110,20 +101,30 @@
             var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xcccccc, opacity: 0.2 }));
             line.position.z = (i * 50) - 500;
             scene.add(line);
-
             // 画纵线
             var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xcccccc, opacity: 0.2 }));
             line.position.x = (i * 50) - 500;
             line.rotation.y = 90 * Math.PI / 180;
             scene.add(line);
         }
+
+        var geometry = new THREE.BoxGeometry(100, 100, 100);
+        var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
+
+        box = new THREE.Mesh(geometry, BoxMaterial);
+        box.position.x = 1; // 物体右移
+        box.position.y = 1; // 物体上移
+        box.position.z = 1; // 物体前移
+        scene.add(box);
     }
 
     function render() {
         renderer.clear();
         renderer.render(scene, camera);
         // console.log(box.rotation.x);
+        // 2Π = 360° 
         box.rotation.x += 0.01;
+        // 除了x y z还可以围绕特定的向量去旋转
 
         // 只要浏览器闲置，就会不断被调用
         requestAnimationFrame(render);
