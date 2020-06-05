@@ -57,7 +57,7 @@
     function initTween() {
         createjs.Tween.get(camera.position, {
             loop: true
-        }).to({ x: 200 }, 3000);
+        }).to({ x: 300 }, 3000);
     }
 
     function initRenderer() {
@@ -83,7 +83,7 @@
     function initCamera() {
         camera = new THREE.PerspectiveCamera(45, body.clientWidth / body.clientHeight, 1, 10000);
 
-        camera.position.x = 100;
+        camera.position.x = -300;
         camera.position.y = 100;
         camera.position.z = 1000;
 
@@ -123,7 +123,7 @@
 
     function render() {
         stats.begin();
-        renderer.clear();
+        // renderer.clear();
         renderer.render(scene, camera);
         // console.log(box.rotation.x);
         // 2Π = 360° 
