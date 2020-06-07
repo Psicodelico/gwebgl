@@ -57,7 +57,9 @@
     function initTween() {
         createjs.Tween.get(camera.position, {
             loop: true
-        }).to({ x: 300 }, 3000);
+        }).to({
+            x: 300
+        }, 3000);
     }
 
     function initRenderer() {
@@ -83,9 +85,9 @@
     function initCamera() {
         camera = new THREE.PerspectiveCamera(45, body.clientWidth / body.clientHeight, 1, 10000);
 
-        camera.position.x = -300;
-        camera.position.y = 100;
-        camera.position.z = 1000;
+        camera.position.x = 0;
+        camera.position.y = 0;
+        camera.position.z = 600;
 
         /* camera.up.x = 10;
         camera.up.y = 10;
@@ -101,22 +103,25 @@
 
     function initLight() {
         light = new THREE.DirectionalLight(0xFF0000, 1.0, 0); // 颜色，强度，..
-        light.position.set(100, 100, 200);// 光线位置
+        light.position.set(100, 100, 200); // 光线位置
         scene.add(light);
     }
     var object, axesHelper, lines;
+
     function initObject() {
         object = new THREE.Object3D();
         axesHelper = new THREE.AxesHelper(200);
         object.add(axesHelper);
 
         var geometry = new THREE.BoxGeometry(100, 100, 100);
-        var BoxMaterial = new THREE.MeshBasicMaterial({ color: "#ffdd00" });
+        var BoxMaterial = new THREE.MeshBasicMaterial({
+            color: "#ffdd00"
+        });
 
         box = new THREE.Mesh(geometry, BoxMaterial);
-        box.position.x = 1; // 物体右移
-        box.position.y = 1; // 物体上移
-        box.position.z = 1; // 物体前移
+        box.position.x = 0; // 物体右移
+        box.position.y = 0; // 物体上移
+        box.position.z = 0; // 物体前移
         object.add(box);
         scene.add(object);
     }
@@ -125,10 +130,8 @@
         stats.begin();
         // renderer.clear();
         renderer.render(scene, camera);
-        // console.log(box.rotation.x);
-        // 2Π = 360° 
-        box.rotation.y -= 0.01;
-        object.rotation.x += 0.01;
+        // 2Π = 360°
+        // object.rotation.x += 0.01;
         // axesHelper.rotation.x += 0.01;
         // 除了x y z还可以围绕特定的向量去旋转
 
@@ -146,12 +149,11 @@
         initObject();
 
         initStats();
-        initTween();
+        // initTween();
         render();
     }
 
     init();
-
 </script>
 
 </html>
