@@ -22,6 +22,12 @@
             right: 0px;
             bottom: 0px;
         }
+
+        .btns {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
     </style>
     <script>
         function addEvent(dom, type, fn) {
@@ -54,9 +60,36 @@
 </head>
 
 <body>
-
+    <div class="btns">
+        <button type="button" onclick="x(1)">x+</button>
+        <button type="button" onclick="x(-1)">x-</button>
+        <button type="button" onclick="y(1)">y+</button>
+        <button type="button" onclick="y(-1)">y-</button>
+        <button type="button" onclick="z(1)">z+</button>
+        <button type="button" onclick="z(-1)">z-</button>
+    </div>
 </body>
 <script>
+    function setCamera() {
+        camera.lookAt(0, 0, 0);
+        console.log(camera.up);
+    }
+
+    function x(v) {
+        camera.up.x += v;
+        setCamera();
+    }
+
+    function y(v) {
+        camera.up.y += v;
+        setCamera();
+    }
+
+    function z(v) {
+        camera.up.z += v;
+        setCamera();
+    }
+
     var body = document.body;
     console.log(body.clientWidth, body.clientHeight);
 
@@ -99,20 +132,17 @@
     function initCamera() {
         camera = new THREE.PerspectiveCamera(45, body.clientWidth / body.clientHeight, 1, 10000);
 
-        camera.position.x = 0;
+        /* camera.position.x = 0;
         camera.position.y = 0;
-        camera.position.z = 600;
+        camera.position.z = 600; */
+        camera.position.set(0, 300, 1000);
 
-        /* camera.up.x = 10;
-        camera.up.y = 10;
-        camera.up.z = 10; */
+        /* camera.up.x = -1;
+        camera.up.y = -10;
+        camera.up.z = 1; */
+        camera.up.set(0, 1, 0);
 
-        /* camera.lookAt({
-            x: 1000,
-            y: 0,
-            z: 0
-        }); */
-
+        camera.lookAt(0, 0, 0);
     }
 
     function initLight() {
