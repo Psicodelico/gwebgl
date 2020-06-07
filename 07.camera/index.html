@@ -33,6 +33,20 @@
                 dom["on" + type] = fn;
             }
         }
+
+        function throttle(fn, delay) {
+            let timer = null;
+            return function () {
+                let context = this;
+                let args = arguments;
+                if (!timer) {
+                    timer = setTimeout(function () {
+                        fn.apply(context, args);
+                        timer = null;
+                    }, delay);
+                }
+            }
+        }
     </script>
     <script src="../common/three/three.min.js"></script>
     <script src="../common/stats/stats.min.js"></script>
@@ -72,9 +86,9 @@
         body.appendChild(renderer.domElement);
 
         // resize浏览器窗口自动缩放
-        /* addEvent(window,'resize',function(){
+        addEvent(window, 'resize', throttle(function () {
             renderer.setSize(body.clientWidth, body.clientHeight);
-        }); */
+        }, 500));
     }
 
     function initScene() {
