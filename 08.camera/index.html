@@ -182,9 +182,15 @@
         scene.add(object);
     }
 
+    function changeFov(fov) {
+        camera.fov = fov;
+        camera.updateProjectionMatrix();
+    }
+
     function render() {
         stats.begin();
         // renderer.clear();
+        changeFov(guiParam.fov);
         renderer.render(scene, camera);
         // 2Π = 360°
         // object.rotation.x += 0.01;
