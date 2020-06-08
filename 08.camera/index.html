@@ -73,7 +73,7 @@
 <script>
     function setCamera() {
         camera.lookAt(0, 0, 0);
-        console.log(camera.up);
+        // console.log(camera.up);
     }
 
     function x(v) {
@@ -112,11 +112,17 @@
 
     function initGUI() {
         var fnParam = function () {
+            this.x = 0;
+            this.y = 1;
+            this.z = 0;
             this.fov = 45;
         }
         guiParam = new fnParam();
         var gui = new dat.GUI();
         gui.add(guiParam, 'fov', 0, 180).name("视角大小");
+        gui.add(guiParam, 'x', -30, 30).name("up-x");
+        gui.add(guiParam, 'y', -30, 30).name("up-y");
+        gui.add(guiParam, 'z', -30, 30).name("up-z");
     }
 
     function initRenderer() {
@@ -182,15 +188,19 @@
         scene.add(object);
     }
 
-    function changeFov(fov) {
-        camera.fov = fov;
+    function changeCamera(param) {
+        camera.up.x = param.x;
+        camera.up.y = param.y;
+        camera.up.z = param.z;
+        camera.fov = param.fov;
+        setCamera();
         camera.updateProjectionMatrix();
     }
 
     function render() {
         stats.begin();
         // renderer.clear();
-        changeFov(guiParam.fov);
+        changeCamera(guiParam);
         renderer.render(scene, camera);
         // 2Π = 360°
         // object.rotation.x += 0.01;
