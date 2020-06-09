@@ -113,10 +113,16 @@
     function initGUI() {
         var fnParam = function () {
             this.fov = 45;
+            this.lightx = 100;
+            this.lighty = 100;
+            this.lightz = 200;
         }
         guiParam = new fnParam();
         var gui = new dat.GUI();
         gui.add(guiParam, 'fov', 0, 180).name("视角大小");
+        gui.add(guiParam, 'lightx', -1000, 1000).name("光线位置x");
+        gui.add(guiParam, 'lighty', -1000, 1000).name("光线位置y");
+        gui.add(guiParam, 'lightz', -1000, 1000).name("光线位置z");
     }
 
     function initRenderer() {
@@ -194,10 +200,15 @@
         camera.updateProjectionMatrix();
     }
 
+    function changeLightLoc() {
+        light.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz)
+    }
+
     function render() {
         stats.begin();
         // renderer.clear();
         changeFov(guiParam.fov);
+        changeLightLoc()
         renderer.render(scene, camera);
         // 2Π = 360°
         // object.rotation.x += 0.01;
