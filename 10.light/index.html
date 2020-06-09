@@ -94,7 +94,7 @@
     var body = document.body;
     console.log(body.clientWidth, body.clientHeight);
 
-    var scene, camera, renderer, light, stats, guiParam;
+    var scene, camera, renderer, light, pointLight, stats, guiParam;
 
     function initStats() {
         stats = new Stats();
@@ -124,7 +124,7 @@
         gui.add(guiParam, 'lightx', -1000, 1000).name("光线位置x");
         gui.add(guiParam, 'lighty', -1000, 1000).name("光线位置y");
         gui.add(guiParam, 'lightz', -1000, 1000).name("光线位置z");
-        gui.add(guiParam, 'intensity', 0, 1).name("光线位置z");
+        gui.add(guiParam, 'intensity', 0, 1).name("光线强度");
     }
 
     function initRenderer() {
@@ -174,7 +174,11 @@
         light.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz); // 光线位置
         /* var helper = new THREE.DirectionalLightHelper(light, 5);
         scene.add(helper); */
-        scene.add(light);
+        // scene.add(light);
+
+        pointLight = new THREE.PointLight(0xff0000, guiParam.intensity, 400);
+        pointLight.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz); // 光线位置
+        scene.add(pointLight);
     }
     var object, axesHelper, lines;
 
@@ -205,6 +209,8 @@
     function changeLightLoc() {
         light.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz);
         light.intensity = guiParam.intensity;
+        pointLight.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz);
+        pointLight.intensity = guiParam.intensity;
     }
 
     function render() {
