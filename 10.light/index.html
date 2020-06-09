@@ -117,6 +117,7 @@
             this.lighty = 100;
             this.lightz = 200;
             this.intensity = 1;
+            this.decay = 1;
         }
         guiParam = new fnParam();
         var gui = new dat.GUI();
@@ -125,6 +126,7 @@
         gui.add(guiParam, 'lighty', -1000, 1000).name("光线位置y");
         gui.add(guiParam, 'lightz', -1000, 1000).name("光线位置z");
         gui.add(guiParam, 'intensity', 0, 1).name("光线强度");
+        gui.add(guiParam, 'decay', 0, 1).name("衰减");
     }
 
     function initRenderer() {
@@ -176,7 +178,7 @@
         scene.add(helper); */
         // scene.add(light);
 
-        pointLight = new THREE.PointLight(0xff0000, guiParam.intensity, 400);
+        pointLight = new THREE.PointLight(0xff0000, guiParam.intensity, 400, guiParam.decay);
         pointLight.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz); // 光线位置
         scene.add(pointLight);
     }
@@ -211,6 +213,7 @@
         light.intensity = guiParam.intensity;
         pointLight.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz);
         pointLight.intensity = guiParam.intensity;
+        pointLight.decay = guiParam.decay;
     }
 
     function render() {
