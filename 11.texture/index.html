@@ -111,16 +111,15 @@
     }
 
     function initGUI() {
-        var fnParam = function () {
-            this.fov = 45;
-            this.repeat = 1;
-            this.rotation = 0;
-        }
-        guiParam = new fnParam();
+        guiParam = {
+            fov: 45,
+            repeat: 2,
+            wrap: 1000
+        };
         var gui = new dat.GUI();
-        gui.add(guiParam, 'fov', 0, 180).name("视角大小");
-        gui.add(guiParam, 'repeat', -5, 5).name("纹理重复");
-        gui.add(guiParam, 'rotation', 0, 2 * Math.PI).name("纹理环绕");
+        gui.add(guiParam, 'fov').name("视角大小").min(0).max(180);
+        gui.add(guiParam, 'repeat').name("纹理重复").min(-5).max(5);
+        gui.add(guiParam, 'wrap').name("纹理环绕").min(1000).max(1002).step(1);
     }
 
     function initRenderer() {
@@ -174,9 +173,8 @@
 
         var geometry = new THREE.PlaneGeometry(500, 300, 32);
         texture = new THREE.TextureLoader().load('./witcher.jpg');
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set(1, 1);
+        texture.wrapS = texture.wrapT = guiParam.wrap;
+        texture.repeat.set(guiParam.repeat, guiParam.repeat);
 
         // 立即使用纹理进行材质创建
         var material = new THREE.MeshBasicMaterial({
@@ -196,7 +194,9 @@
 
     function changeTexture() {
         if (!!texture) {
+            texture.wrapS = texture.wrapT = guiParam.wrap;
             texture.repeat.set(guiParam.repeat, guiParam.repeat);
+            texture.needsUpdate = true;
         }
     }
 
