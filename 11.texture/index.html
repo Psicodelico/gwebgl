@@ -114,12 +114,16 @@
         guiParam = {
             fov: 45,
             repeat: 2,
-            wrap: 1000
+            wrap: 1000,
+            offsetX: 0,
+            offsetY: 0,
         };
         var gui = new dat.GUI();
         gui.add(guiParam, 'fov').name("视角大小").min(0).max(180);
         gui.add(guiParam, 'repeat').name("纹理重复").min(-5).max(5);
         gui.add(guiParam, 'wrap').name("纹理环绕").min(1000).max(1002).step(1);
+        gui.add(guiParam, 'offsetX').name("X轴偏移").min(-1).max(1).step(0.1);
+        gui.add(guiParam, 'offsetY').name("Y轴偏移").min(-1).max(1).step(0.1);
     }
 
     function initRenderer() {
@@ -196,6 +200,8 @@
         if (!!texture) {
             texture.wrapS = texture.wrapT = guiParam.wrap;
             texture.repeat.set(guiParam.repeat, guiParam.repeat);
+            texture.offset.x = guiParam.offsetX;
+            texture.offset.y = guiParam.offsetY;
             texture.needsUpdate = true;
         }
     }
