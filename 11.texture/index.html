@@ -94,7 +94,7 @@
     var body = document.body;
     console.log(body.clientWidth, body.clientHeight);
 
-    var scene, camera, renderer, light, pointLight, stats, guiParam;
+    var scene, camera, renderer, light, pointLight, stats, guiParam, texture;
 
     function initStats() {
         stats = new Stats();
@@ -113,20 +113,14 @@
     function initGUI() {
         var fnParam = function () {
             this.fov = 45;
-            this.lightx = 100;
-            this.lighty = 100;
-            this.lightz = 200;
-            this.intensity = 1;
-            this.decay = 1;
+            this.repeat = 1;
+            this.rotation = 0;
         }
         guiParam = new fnParam();
         var gui = new dat.GUI();
         gui.add(guiParam, 'fov', 0, 180).name("视角大小");
-        gui.add(guiParam, 'lightx', -1000, 1000).name("光线位置x");
-        gui.add(guiParam, 'lighty', -1000, 1000).name("光线位置y");
-        gui.add(guiParam, 'lightz', -1000, 1000).name("光线位置z");
-        gui.add(guiParam, 'intensity', 0, 1).name("光线强度");
-        gui.add(guiParam, 'decay', 0, 1).name("衰减");
+        gui.add(guiParam, 'repeat', -5, 5).name("纹理重复");
+        gui.add(guiParam, 'rotation', 0, 2 * Math.PI).name("纹理环绕");
     }
 
     function initRenderer() {
@@ -179,7 +173,10 @@
         object.add(axesHelper);
 
         var geometry = new THREE.PlaneGeometry(500, 300, 32);
-        var texture = new THREE.TextureLoader().load('./witcher.jpg');
+        texture = new THREE.TextureLoader().load('./witcher.jpg');
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(1, 1);
 
         // 立即使用纹理进行材质创建
         var material = new THREE.MeshBasicMaterial({
@@ -197,19 +194,17 @@
         camera.updateProjectionMatrix();
     }
 
-    function changeLightLoc() {
-        light.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz);
-        light.intensity = guiParam.intensity;
-        pointLight.position.set(guiParam.lightx, guiParam.lighty, guiParam.lightz);
-        pointLight.intensity = guiParam.intensity;
-        pointLight.decay = guiParam.decay;
+    function changeTexture() {
+        if (!!texture) {
+            texture.repeat.set(guiParam.repeat, guiParam.repeat);
+        }
     }
 
     function render() {
         stats.begin();
         // renderer.clear();
         changeFov(guiParam.fov);
-        changeLightLoc()
+        changeTexture();
         renderer.render(scene, camera);
 
         // 只要浏览器闲置，就会不断被调用
