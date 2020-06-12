@@ -175,7 +175,7 @@
         axesHelper = new THREE.AxesHelper(200);
         object.add(axesHelper);
 
-        var geometry = new THREE.PlaneGeometry(500, 300, 1);
+        var geometry = new THREE.PlaneGeometry(500, 300, 2, 3);
 
         // 立即使用纹理进行材质创建
         var material = new THREE.MeshBasicMaterial({
@@ -188,14 +188,12 @@
         var color3 = new THREE.Color(0x0000ff);
         // var color4 = new THREE.Color(0x00fff0);
 
-        const f0 = geometry.faces[0],
-            f1 = geometry.faces[1];
-        f0.vertexColors.push(color1);
-        f0.vertexColors.push(color2);
-        f0.vertexColors.push(color3);
-        f1.vertexColors.push(color2);
-        f1.vertexColors.push(color1);
-        f1.vertexColors.push(color3);
+        for (let i = 0; i < geometry.faces.length; i++) {
+            let f = geometry.faces[i];
+            f.vertexColors.push(color1);
+            f.vertexColors.push(color2);
+            f.vertexColors.push(color3);
+        }
 
         var plane = new THREE.Mesh(geometry, material);
         plane.position.set(0, 0, -1);
