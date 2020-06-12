@@ -148,7 +148,7 @@
 
     function initCamera() {
         camera = new THREE.PerspectiveCamera(45, body.clientWidth / body.clientHeight, 1, 10000);
-        camera.position.set(0, 0, 1000);
+        camera.position.set(200, 200, 1000);
         camera.up.set(0, 1, 0);
         camera.lookAt(0, 0, 0);
     }
@@ -196,8 +196,25 @@
         }
 
         var plane = new THREE.Mesh(geometry, material);
-        plane.position.set(0, 0, -1);
+        plane.position.set(0, 0, -10);
         object.add(plane);
+
+        var triangle = new THREE.Geometry();
+        triangle.vertices.push(
+            new THREE.Vector3(100, 0, 0),
+            new THREE.Vector3(0, 100, 0),
+            new THREE.Vector3(0, 0, 100)
+        );
+        triangle.faces.push(new THREE.Face3(0, 1, 2));
+        triangle.faces[0].vertexColors.push(color1);
+        triangle.faces[0].vertexColors.push(color2);
+        triangle.faces[0].vertexColors.push(color3);
+        triangle.computeBoundingSphere();
+        var tri = new THREE.Mesh(triangle, material);
+        tri.position.set(0, 0, -1);
+
+        object.add(tri);
+
         scene.add(object);
     }
 
