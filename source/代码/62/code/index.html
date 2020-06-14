@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="js/Vector3.js"></script>
+</head>
+<body>
+	
+</body>
+
+<script type="text/javascript">
+	
+	// 向量的加法
+	var v1 = new THREE.Vector3(2,0,0);
+	var v2 = new THREE.Vector3(0,1,0);
+	// 1,1,0
+	var v3 = v1.add(v2);
+	v3.print();
+
+
+	// 向量的减法
+	v1 = new THREE.Vector3(1,0,0);
+	v1.sub(v2);
+	v1.print(); //  1 -1 0 
+
+	// 向量的模及都向量长度
+	v1 = new THREE.Vector3(1,0,0);
+	console.log("向量的长度：" +v1.length());
+
+
+	// 向量的点积、数量积
+	v1 = new THREE.Vector3(1,0,0);  
+	console.log("向量的点积：" + v1.dot(v2));
+
+	v1 = new THREE.Vector3(1,0,0); 
+	console.log("向量的夹角：" + v1.intersectionAngle(v1,v2));
+
+
+	// 向量的叉积
+	v1 = new THREE.Vector3(1,0,0);
+	v1.cross(v2);
+	v1.print();
+
+
+</script>
+</html>

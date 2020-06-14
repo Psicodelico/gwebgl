@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+</head>
+<body>
+	<div></div>
+</body>
+<script src="js/three.js"></script>
+<script src="js/loaders/OBJLoader.js"></script>
+
+<script>
+	
+	var texture = new THREE.Texture();
+
+	var manager = new THREE.LoadingManager();
+
+	// 加载的过程函数
+	manager.onProgress = function ( item, loaded, total ) {
+
+		console.log( item, loaded, total );
+
+	};
+
+	// 
+	var loader = new THREE.ImageLoader(manager);
+
+	loader.load("obj/male02/male-02-1noCulling.JPG", function(image){
+		texture.image = image;
+		texture.needsUpdate = true;
+	},function(event){
+		console.log(event);
+	});
+
+	// 加载obj模型
+	var objloader = new THREE.OBJLoader(manager);
+	objloader.load("obj/male02/male02.obj",function(object){
+
+		var i = 0;
+		i++;
+	},function(event){
+		if(event.lengthComputable){
+			var p = event.loaded / event.total * 100;
+			console.log("已经加载了" + p + "%");
+		}
+	},function ( xhr ) {
+	}
+	);
+
+
+
+
+
+</script>
+
+</html>

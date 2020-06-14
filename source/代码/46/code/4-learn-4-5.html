@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>粒子系统</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #fff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				color:#fff;
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info">
+		</div>
+
+		<script src="js/three.js"></script>
+
+		<script src="js/loaders/BinaryLoader.js"></script>
+
+		<script src="js/shaders/ConvolutionShader.js"></script>
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/FilmShader.js"></script>
+		<script src="js/shaders/FocusShader.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/BloomPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/FilmPass.js"></script>
+
+		<script src="js/Detector.js"></script>
+
+		<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var SCREEN_HEIGHT = window.innerHeight;
+			var SCREEN_WIDTH = window.innerWidth;
+
+			var container;
+
+			var camera, scene, renderer, mesh, directionalLight;
+
+			var parent, meshes = [], clonemeshes = [];
+
+			var p;
+
+			var aloader, bloader;
+
+			var composer, effectFocus;
+
+			var clock = new THREE.Clock();
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+				camera = new THREE.PerspectiveCamera( 20, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 50000 );
+				camera.position.set( 0, 700, 11000 );
+
+				scene = new THREE.Scene();
+				//scene.fog = new THREE.FogExp2( 0x000104, 0.0000675 );
+
+				camera.lookAt( scene.position );
+
+				// 要去加载几个模型 JOSN，Binary，
+				// JSONLoader
+				aloader = new THREE.JSONLoader();
+				bloader = new THREE.BinaryLoader();
+				aloader.load("obj/terrain.js",function(geometry){
+					// var material = new THREE.MeshBasicMaterial({color:0xFF0000,wireframe:true});
+					// var mesh = new THREE.Mesh(geometry,material);
+					// scene.add(mesh);
+
+				});
+
+				// car
+				bloader.load("obj/veyron/VeyronNoUv_bin.js",function(geometry){
+					
+					createMesh(geometry,scene,6.8,2200,-200,100,0x0055ff,false);
+
+				});
+
+				// female
+				bloader.load("obj/female02/Female02_bin.js",function(geometry){
+					// 
+				
+					createMesh(geometry,scene,4.05,-1000,-350,0,0xffdd44,true);
+					createMesh(geometry,scene,4.05, 0,-350,0,  0xff5522,true);
+					createMesh(geometry,scene,4.05,100,-350,400,0xff4422,true);
+					createMesh(geometry,scene,4.05,250,-350,2050,0xff0044,true);
+
+				});
+				// male
+				bloader.load("obj/male02/Male02_bin.js",function(geometry){
+					createMesh(geometry,scene,4.05,-500,-350,600,0xff7744,true);
+					createMesh(geometry,scene,4.05, 500,-350,0,  0xff5522,true);
+					createMesh(geometry,scene,4.05,-250,-350,1000,0xff7744,true);
+					createMesh(geometry,scene,4.05,-250,-350,-350,0xff9944,true);
+
+				});
+			
+				// 粒子系统
+				parent = new THREE.Object3D(); // group
+				scene.add(parent);
+
+				var grid = new THREE.Points(new THREE.PlaneBufferGeometry(15000,15000,64,64),new THREE.PointsMaterial({
+					color:0xff0000,size:10
+				}));
+				grid.position.y = -400;
+				grid.rotation.x = - Math.PI /2;
+
+				parent.add(grid);
+				
+
+
+				
+
+				//
+
+				renderer = new THREE.WebGLRenderer( { antialias: false } );
+				//renderer.setClearColor( scene.fog.color );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+				renderer.autoClear = false;
+				renderer.sortObjects = false;
+				container.appendChild( renderer.domElement );
+
+				//
+
+				//
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			//
+
+			function onWindowResize( event ) {
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				camera.lookAt( scene.position );
+
+				composer.reset();
+
+				effectFocus.uniforms[ "screenWidth" ].value = window.innerWidth;
+				effectFocus.uniforms[ "screenHeight" ].value = window.innerHeight;
+
+			}
+
+			//
+
+
+			var j, jl, cm, data, vertices, vertices_tmp, vl, d, vt;
+
+			function animate () {
+
+				requestAnimationFrame( animate );
+				render();
+
+			}
+
+			function render () {
+
+				// 计算每一帧的时间
+
+				// 根据动态或者静态模型调整 每个模型的顶点位置
+
+				
+
+				
+				renderer.clear();
+				renderer.render(scene,camera);
+				//composer.render( 0.01 );
+
+			}
+
+			function createMesh(orginalGeometry,scene,scale,x,y,z,color,dynamic){
+				// 获取顶点的位置
+
+				var vertices = orginalGeometry.vertices;
+				var vl = vertices.length;
+
+				// 几何体对象和相关属性
+				var geometry = new THREE.Geometry();
+				var vertices_tmp = []; // x,y,z,down,up
+
+				for(i = 0;i<vl;i++){
+					p = vertices[i];
+					geometry.vertices[i] = p.clone();
+
+					vertices_tmp[i] = [p.x,p.y,p.z,0,0];
+				}
+
+				// 人的位置
+				var clones = [
+					[2000,0,-2000],
+					[2000,0,0],
+					[1000,0,500],
+					[1000,0,-5000],
+					[3000,0,2000],
+					[-4000,0,1000],
+					[-4500,0,-3000],
+					[0,0,0]
+				];
+
+
+				// 模型上到下，或者下到上，静态的物体，动态物体 ，生产points
+				if(dynamic){
+
+					for (var i = 0 ; i < clones.length; i++) {
+						c = ( i< clones.length-1 ) ? 0x454545:color;
+
+						mesh = new THREE.Points(geometry,new THREE.PointsMaterial({
+							color:c,size:3
+						}));
+
+						mesh.scale.x = mesh.scale.y = mesh.scale.z = scale;
+
+						mesh.position.x = x + clones[i][0];
+						mesh.position.y = y + clones[i][1];
+						mesh.position.z = z + clones[i][2];
+
+						parent.add(mesh);
+						// 将所有的对象管理起来，可能是放到数组里面
+						clonemeshes.push({mesh:mesh,speed:0.5 + Math.random()});
+					};
+
+				}else{
+					mesh = new THREE.Points(geometry,new THREE.PointsMaterial({
+						color:color,size:3
+					}));
+
+					mesh.scale.x = mesh.scale.y = mesh.scale.z = scale;
+					mesh.position.x = x;
+					mesh.position.y = y;
+					mesh.position.z = z;
+
+					parent.add(mesh);
+
+				}
+
+				// 设置一些初始化的参数，方向
+				meshes.push(
+					{
+						mesh:mesh,
+						vertices:geometry.vertices,
+						vertices_tmp:vertices_tmp,
+						vl:vl,
+						down:0,
+						up:0,
+						speed:35,
+						delay:Math.floor(200+200*Math.random()),
+						started:false,
+						start:Math.floor(100+200*Math.random()),
+						dynamic:dynamic
+
+					});
+			}
+
+		</script>
+
+	</body>
+
+</html>

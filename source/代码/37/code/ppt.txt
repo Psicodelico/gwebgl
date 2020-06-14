@@ -1,0 +1,45 @@
+Raycaster类是用来实现拾取的一个简单类。说他简单，是因为，你基本不需要去了解他的原理，就可以使用他。
+
+
+构造函数：
+THREE.Raycaster = function ( origin, direction, near, far ) 
+
+origin:光线发射出去的地方
+direction:归一化的方向向量
+near：光线发射最近的距离
+far：光线发射最远的距离。
+
+如果不传参数，那么这条光线的原点和方向都为默认的原点
+
+
+setFromCamera: function ( coords, camera )
+coords：鼠标的位置，是一个归一化的设备坐标，必须在-1到1之间。
+camera：光线起源的位置
+
+
+intersectObjects: function ( objects, recursive ) 
+哪些对象和他相交
+
+
+
+
+Vector3
+从相机矩阵的位置找到光线的位置。
+	setFromMatrixPosition: function ( m ) {
+
+		this.x = m.elements[ 12 ];
+		this.y = m.elements[ 13 ];
+		this.z = m.elements[ 14 ];
+
+		return this;
+
+	},
+
+
+从屏幕中的设备坐标，转化为世界坐标，然后减去起点，就得到方向了。，最后归一化，
+this.ray.direction.set( coords.x, coords.y, 0.5 ).unproject( camera ).sub( this.ray.origin ).normalize();
+
+
+判断怎么和Mesh相交，
+Object3D有一个抽象方法raycast，此方法被Mesh实现了。
+

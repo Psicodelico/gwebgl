@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - geometry - shapes</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				font-family: Monospace;
+				background-color: #f0f0f0;
+				margin: 0px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+
+		<script src="js/three.js"></script>
+		<script src="js/stats.min.js"></script>
+
+		<script>
+
+			var area = function ( contour ) {
+
+				var n = contour.length;
+				var a = 0.0;
+
+				for ( var p = n - 1, q = 0; q < n; p = q ++ ) {
+
+					a += contour[ p ].x * contour[ q ].y - contour[ q ].x * contour[ p ].y;
+
+				}
+
+				return a * 0.5;
+
+			}
+			
+			var isClockWise = function ( pts ) {
+
+				return area( pts ) < 0;
+
+			}
+			
+			var p1 = new THREE.Vector2(1,0);
+			var p2 = new THREE.Vector2(0,1);
+			var p3 = new THREE.Vector2(-1,0);
+			
+			var pts = [p1,p2,p3];
+			
+			var b = isClockWise(pts);
+			console.log(b);
+			
+
+		</script>
+
+	</body>
+</html>
